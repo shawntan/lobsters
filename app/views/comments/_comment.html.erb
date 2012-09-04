@@ -29,10 +29,14 @@ class="comment <%= comment.current_vote ? (comment.current_vote[:vote] == 1 ?
         <%= time_ago_in_words(comment.has_been_edited?? comment.updated_at :
           comment.created_at).gsub(/^about /, "") %> ago
 
-        <span class="reason"><%= comment.current_vote &&
-          comment.current_vote[:vote] == -1 ?
-          "(#{Vote::COMMENT_REASONS[comment.current_vote[:reason]].downcase})" :
-          "" %></span>
+        <span class="reason">
+          <% if comment.downvotes > 0 && comment.user_id == @user.try(:id) %>
+            (<%= comment.downvote_summary.downcase %>)
+          <% elsif comment.current_vote && comment.current_vote[:vote] == -1 %>
+            (<%= Vote::COMMENT_REASONS[comment.current_vote[:reason]].downcase
+              %>)
+          <% end %>
+        </span>
       <% end %>
 
       <% if !comment.previewing %>
@@ -48,7 +52,7 @@ class="comment <%= comment.current_vote ? (comment.current_vote[:vote] == 1 ?
         <% if comment.is_gone? && comment.is_undeletable_by_user?(@user) %>
           |
           <a class="comment_undeletor">undelete</a>
-        <% elsif !comment.is_gone? && comment.is_editable_by_user?(@user) %>
+        <% elsif !comment.is_gone? && comment.is_deletable_by_user?(@user) %>
           |
           <a class="comment_deletor">delete</a>
         <% end %>
@@ -73,8 +77,8 @@ class="comment <%= comment.current_vote ? (comment.current_vote[:vote] == 1 ?
       <% if comment.is_gone? %>
         <p>
         <span class="na">
-        [Comment removed by <%= comment.is_deleted? ? "author" :
-          "moderator" %>]
+        [Comment removed by <%= comment.is_moderated? ? "moderator" :
+          "author" %>]
         </span>
         </p>
       <% else %>

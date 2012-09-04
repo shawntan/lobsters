@@ -281,6 +281,10 @@ div#inside {
 	color: #333;
 }
 
+#header a.new_messages {
+	color: #ac130d;
+}
+
 
 /* footer */
 
@@ -344,7 +348,7 @@ div.voters {
 div.voters div.score {
 	color: #aaa;
 	font-size: 9pt;
-	margin-top: 0px;
+	margin-top: 1px;
 	margin-bottom: -3px;
 	text-align: center;
 }
@@ -626,7 +630,8 @@ div#story_preview {
 div#story_box input#story_url {
 	width: 508px;
 }
-div#story_box input#story_title {
+div#story_box input#story_title,
+div#story_box input#story_moderation_reason {
 	width: 600px;
 }
 div#story_box #story_tags_a {

@@ -6,8 +6,11 @@ Lobsters::Application.routes.draw do
 
   get "/newest(.format)" => "home#newest"
   get "/newest/page/:page" => "home#newest"
+  get "/newest/:user" => "home#newest_by_user"
+  get "/newest/:user/page/:page" => "home#newest_by_user"
 
   get "/threads" => "comments#threads"
+  get "/threads/:user" => "comments#threads"
 
   get "/login" => "login#index"
   post "/login" => "login#login"
@@ -71,4 +74,7 @@ Lobsters::Application.routes.draw do
   
   post "/invitations" => "invitations#create"
   get "/invitations/:invitation_code" => "signup#invited"
+  
+  get "/moderations" => "moderations#index"
+  get "/moderations/page/:page" => "moderations#index"
 end
