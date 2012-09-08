@@ -557,6 +557,9 @@ div.comment_reply form {
 	padding-top: 1em;
 }
 
+div.comment_reply button.comment-post {
+	font-weight: bold;
+}
 
 a.pagelink {
 	border: 1px solid #ddd;

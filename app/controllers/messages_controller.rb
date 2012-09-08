@@ -3,6 +3,9 @@ class MessagesController < ApplicationController
   before_filter :find_message, :only => [ :show, :destroy, :keep_as_new ]
 
   def index
+    @cur_url = "/messages"
+    @title = "Messages"
+
     @new_message = Message.new
 
     if params[:to]
@@ -11,6 +14,9 @@ class MessagesController < ApplicationController
   end
 
   def create
+    @cur_url = "/messages"
+    @title = "Messages"
+
     @new_message = Message.new(params[:message])
     @new_message.author_user_id = @user.id
 
@@ -25,6 +31,9 @@ class MessagesController < ApplicationController
   end
 
   def show
+    @cur_url = "/messages"
+    @title = @message.subject
+
     @new_message = Message.new
     @new_message.recipient_username = (@message.author_user_id == @user.id ?
       @message.recipient.username : @message.author.username)
@@ -66,12 +75,14 @@ class MessagesController < ApplicationController
 private
   def find_message
     if @message = Message.find_by_short_id(params[:message_id ] || params[:id])
-      if !(@message.author_user_id == @user.id ||
+      if (@message.author_user_id == @user.id ||
       @message.recipient_user_id == @user.id)
-        flash[:error] = "Could not find message."
-        redirect_to "/messages"
-        return false
+        return true
       end
     end
+
+    flash[:error] = "Could not find message."
+    redirect_to "/messages"
+    return false
   end
 end

@@ -29,10 +29,11 @@ class Keystore < ActiveRecord::Base
     new_value = nil
 
     if Rails.env == "test"
-      # FIXME
-      Keystore.connection.execute("INSERT OR REPLACE INTO " <<
+      Keystore.connection.execute("INSERT OR IGNORE INTO " <<
         "#{Keystore.table_name} (`key`, `value`) VALUES " <<
-        "(#{q(key)}, #{q(amount)})")
+        "(#{q(key)}, 0)")
+      Keystore.connection.execute("UPDATE #{Keystore.table_name} " <<
+        "SET `value` = `value` + #{q(amount)} WHERE `key` = #{q(key)}")
     else
       Keystore.connection.execute("INSERT INTO #{Keystore.table_name} (" +
         "`key`, `value`) VALUES (#{q(key)}, #{q(amount)}) ON DUPLICATE KEY " +

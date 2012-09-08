@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   validates_format_of :username, :with => /\A[A-Za-z0-9][A-Za-z0-9_-]*\Z/
   validates_uniqueness_of :username, :case_sensitive => false
 
-  validates_format_of :email, :with => /\A[^@]+@[^@]+\.[^@]+\Z/
+  validates_format_of :email, :with => /\A[^@ ]+@[^@ ]+\.[^@ ]+\Z/
   validates_uniqueness_of :email, :case_sensitive => false
 
   validates_presence_of :password, :on => :create
@@ -25,10 +25,20 @@ class User < ActiveRecord::Base
     :pushover_device, :email_messages, :pushover_messages
 
   before_save :check_session_token
+  after_create :create_default_tag_filters
 
   def check_session_token
     if self.session_token.blank?
       self.session_token = Utils.random_str(60)
+    end
+  end
+
+  def create_default_tag_filters
+    Tag.where(:filtered_by_default => true).each do |t|
+      tf = TagFilter.new
+      tf.tag_id = t.id
+      tf.user_id = self.id
+      tf.save
     end
   end
 
@@ -44,6 +54,14 @@ class User < ActiveRecord::Base
 
   def karma
     Keystore.value_for("user:#{self.id}:karma").to_i
+  end
+
+  def average_karma
+    if self.karma == 0
+      0
+    else
+      self.karma.to_f / (self.stories_submitted_count + self.comments_posted_count)
+    end
   end
 
   def stories_submitted_count
