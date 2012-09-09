@@ -60,7 +60,7 @@ module Lobsters
   end
 end
 
-Rails.application.routes.default_url_options[:host] = "lobste.rs"
+Rails.application.routes.default_url_options[:host] = "antinews.nushackers.org"
 
 module ActiveRecord
   class Base
