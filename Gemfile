@@ -31,3 +31,7 @@ group :test, :development do
   gem "machinist"
   gem "sqlite3"
 end
+
+group :production do
+  gem "therubyracer", "~> 0.10.2"
+end
