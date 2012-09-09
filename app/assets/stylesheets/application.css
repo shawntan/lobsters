@@ -706,6 +706,9 @@ ul.user_tree li, ul.root li {
   color: #888;
 }
 
+.profile-img {
+  float: right;
+}
 /* data tables */
 
 table.data caption {
@@ -837,7 +840,7 @@ table.data tr.void td, table.data tr.void td a {
   line-height: 2em;
 }
 .box br {
-  clear: both;
+  clear: left;
 }
 .box .boxline {
   clear: both;
