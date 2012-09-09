@@ -1,6 +1,5 @@
 Lobsters::Application.routes.draw do
-  root :to => "home#index",
-    :protocol => (Rails.env == "production" ? "https://" : "http://")
+  root :to => "home#index"
 
   get "/page/:page" => "home#index"
 
