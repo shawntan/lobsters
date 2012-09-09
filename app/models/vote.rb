@@ -4,10 +4,10 @@ class Vote < ActiveRecord::Base
 
   STORY_REASONS = {
     "S" => "Spam",
+    "O" => "Off-topic",
     "A" => "Already Posted",
     "L" => "Poorly Titled",
     "T" => "Poorly Tagged",
-    "O" => "Off-topic",
     "" => "Cancel",
   }
 
