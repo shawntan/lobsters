@@ -14,12 +14,12 @@ html {
 
 body, textarea, input, button {
 	font-family: "helvetica neue", arial, sans-serif;
-	font-size: 9.5pt;
+	font-size: 10.5pt;
 	color: #333;
 }
 
 a {
-	color: #2562dc;
+	color: #1F75D3;
 	cursor: pointer;
 }
 
