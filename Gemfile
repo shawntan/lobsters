@@ -19,7 +19,7 @@ gem "nokogiri"
 gem "htmlentities"
 gem "rdiscount"
 
-gem "thinking-sphinx", "2.0.12"
+gem "thinking-sphinx", "2.0.13"
 
 group :test, :development do
   gem "rspec-rails", "~> 2.6"
