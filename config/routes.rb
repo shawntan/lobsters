@@ -30,6 +30,8 @@ Lobsters::Application.routes.draw do
   match "/t/:tag/page/:page" => "home#tagged"
 
   get "/search" => "search#index"
+  get "/about" => "home#about", :as => "about"
+  get "/guidelines" => "home#guidelines", :as => "guidelines"
 
   resources :stories do
     post "upvote"

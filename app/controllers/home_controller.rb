@@ -17,6 +17,12 @@ class HomeController < ApplicationController
     end
   end
 
+  def about
+  end
+
+  def guidelines
+  end
+
   def newest
     @stories = find_stories_for_user_and_tag_and_newest_and_by_user(@user,
       nil, true, nil)
