@@ -11,17 +11,15 @@ gem "dynamic_form"
 gem "exception_notification"
 
 # Use unicorn as the app server
-gem "unicorn"
+#gem "unicorn"
 
 # for asset compilation
 gem "uglifier"
-
 gem "nokogiri"
 gem "htmlentities"
-
 gem "rdiscount"
 
-#gem "thinking-sphinx", "2.0.12"
+gem "thinking-sphinx", "2.0.12"
 
 group :test, :development do
   gem "rspec-rails", "~> 2.6"
