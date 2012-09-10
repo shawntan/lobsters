@@ -215,6 +215,7 @@ div#wrapper {
 div#inside {
   width: 960px;
   margin: 0 auto;
+  padding-bottom: 25px;
 }
 
 #left {
