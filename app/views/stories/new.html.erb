@@ -18,7 +18,7 @@
           <div id="story_guidelines" style="<%= @user &&
           @user.stories_submitted_count > 2 ? "display: none;" : "" %>">
             <div style="float: right;">
-            <a href="javascript:window.location=%22http://antinews.nushackers.org/stories/new?url=%22+encodeURIComponent(document.location)+%22&title=%22+encodeURIComponent(document.title)"
+            <a href="javascript:window.location=%22<%= root_url %>stories/new?url=%22+encodeURIComponent(document.location)+%22&title=%22+encodeURIComponent(document.title)"
             style="border: 1px solid #ddd; padding: 0.5em; background-color:
             #f8f8f8; line-height: 1.5em; margin-left: 1em;">Submit to
             Antinews</a>
@@ -28,7 +28,7 @@
             <li>
             <p>
             To be able to easily submit a page you're viewing in your browser
-            to Antinews, drag the bookmarklet to the right to your bookmark
+            to Antinews, drag the bookmarklet to the right to your bookmar
             bar.  You'll be taken to this page with the viewed page's URL and
             title.
             </p>
@@ -113,13 +113,20 @@
         Lobsters.previewStory($(this).parents("form").first());
       });
 
-      /* if the url looks like a pdf, select the pdf tag */
       $("#story_url").unbind().live("blur", function() {
+        /* if the url looks like a pdf, assign the pdf tag */
         if ($("#story_url").val().match(/\.pdf$/i)) {
           var ta = $("#story_tags_a").data("select2");
 
           if (ta.getVal().indexOf("pdf") < 0)
             ta.addSelectedChoice({ id: "pdf" });
+        }
+        /* if the url looks like a youtube url, assign the video tag */
+        else if ($("#story_url").val().match(/[\/\.]youtube\.com\//i)) {
+          var ta = $("#story_tags_a").data("select2");
+
+          if (ta.getVal().indexOf("video") < 0)
+            ta.addSelectedChoice({ id: "video" });
         }
       });
     <% end %>
