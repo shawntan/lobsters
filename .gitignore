@@ -16,7 +16,7 @@
 # Ignore vim stuff
 *.swp
 *.un~
-
+*~
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /log/*.pid

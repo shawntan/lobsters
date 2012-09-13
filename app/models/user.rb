@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
     :class_name => "Message",
     :foreign_key => "recipient_user_id"
   has_many :tag_filters
-
+  has_many :children, :class_name => "User", :foreign_key => "invited_by_user_id"
   has_secure_password
 
   validates_format_of :username, :with => /\A[A-Za-z0-9][A-Za-z0-9_-]*\Z/
@@ -93,5 +93,12 @@ class User < ActiveRecord::Base
     Comment.connection.select_all("SELECT DISTINCT " +
       "thread_id FROM comments WHERE user_id = #{q(self.id)} ORDER BY " +
       "created_at DESC LIMIT #{q(amount)}").map{|r| r.values.first }
+  end
+  def to_tree
+	  {
+		  "id" 			=> 	self.id,
+		  "name" 	=>	self.username,
+		  "children"	=>	self.children.map { |c| c.to_tree }
+	  }
   end
 end
