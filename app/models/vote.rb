@@ -86,8 +86,10 @@ class Vote < ActiveRecord::Base
     votes
   end
 
-  def self.vote_thusly_on_story_or_comment_for_user_because(vote, story_id,
-  comment_id, user_id, reason, update_counters = true)
+  def self.vote_thusly_on_story_or_comment_for_user_because(
+      vote, story_id, comment_id, user_id, reason,
+      update_counters = true)
+    
     v = Vote.find_or_initialize_by_user_id_and_story_id_and_comment_id(user_id,
       story_id, comment_id)
 
@@ -138,7 +140,7 @@ class Vote < ActiveRecord::Base
         if v.comment_id
           c = Comment.find(v.comment_id)
           if c.user_id != user_id
-            Keystore.increment_value_for("user:#{c.user_id}:karma")
+              Keystore.increment_value_for("user:#{c.user_id}:karma",upvote-downvote)
           end
 
           c.give_upvote_or_downvote_and_recalculate_confidence!(upvote,
@@ -146,7 +148,7 @@ class Vote < ActiveRecord::Base
         else
           s = Story.find(v.story_id)
           if s.user_id != user_id
-            Keystore.increment_value_for("user:#{s.user_id}:karma")
+              Keystore.increment_value_for("user:#{s.user_id}:karma",upvote-downvote)
           end
 
           s.give_upvote_or_downvote_and_recalculate_hotness!(upvote, downvote)
