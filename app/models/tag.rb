@@ -5,6 +5,11 @@ class Tag < ActiveRecord::Base
     user.is_admin?? all : where(:privileged => false)
   end
 
+  # currently unused, for showing number of users using a filter
+  # Usage: 
+  #   <%= f.select "tags_a", Tag.order(:tag).map{|t|
+  #   [ "#{t.tag} - #{t.description}", t.tag ] }, {},
+  #   { :multiple => true } %>
   def self.all_with_filtered_counts_for(user)
     counts = TagFilter.count(:group => "tag_id")
 
