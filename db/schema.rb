@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120910172514) do
+ActiveRecord::Schema.define(:version => 20120919195401) do
 
   create_table "comments", :force => true do |t|
     t.datetime "created_at",                                                                          :null => false
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20120910172514) do
     t.string  "tag",                 :limit => 25,  :default => "",    :null => false
     t.string  "description",         :limit => 100
     t.boolean "filtered_by_default",                :default => false
+    t.boolean "privileged",                         :default => false
   end
 
   add_index "tags", ["tag"], :name => "tag", :unique => true
@@ -139,6 +140,7 @@ ActiveRecord::Schema.define(:version => 20120910172514) do
     t.boolean  "is_moderator",                        :default => false
     t.boolean  "email_mentions",                      :default => false
     t.boolean  "pushover_mentions",                   :default => false
+    t.string   "rss_token"
   end
 
   add_index "users", ["session_token"], :name => "session_hash", :unique => true

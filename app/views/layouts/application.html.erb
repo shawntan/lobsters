@@ -27,7 +27,7 @@
   <div id="header-wrapper">
 <div id="header">
       <div id="headerleft">
-        <% links = { "/newest" => "New" } %>
+<% links = { "/newest" => "New", "/comments" => "Comments" } %>
         <% if @user %>
           <% links.merge!({ "/threads" => "Threads",
             "/stories/new" => "Submit" }) %>

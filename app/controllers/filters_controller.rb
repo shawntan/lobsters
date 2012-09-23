@@ -3,7 +3,7 @@ class FiltersController < ApplicationController
 
   def index
     @cur_url = "/filters"
-    @heading = @title = "Filtered Tags"
+    @title = "Filtered Tags"
 
     @filtered_tags = @user.tag_filters.reload
 
@@ -14,7 +14,8 @@ class FiltersController < ApplicationController
     new_filters = []
 
     params.each do |k,v|
-      if (m = k.match(/^tag_(.+)$/)) && v.to_i == 1 && Tag.find_by_tag(m[1])
+      if (m = k.match(/^tag_(.+)$/)) && v.to_i == 1 &&
+      (t = Tag.find_by_tag(m[1])) && t.valid_for?(@user)
         new_filters.push m[1]
       end
     end

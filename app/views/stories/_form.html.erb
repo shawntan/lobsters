@@ -10,8 +10,8 @@
 	<% elsif !f.object.id %>
     <%= f.label :url, "URL:", :class => "required" %>
 		<%= f.text_field :url, :autocomplete => "off" %>
-		<%= button_to_function "Fetch Title",
-      "Lobsters.fetchURLTitle($(this), $('#story_url'), $('#story_title'));" %>
+    <%= button_tag "Fetch Title", :id => "story_fetch_title",
+      :type => "button" %>
 	<% end %>
   </div>
 
@@ -23,9 +23,14 @@
   <div class="boxline" style="margin-bottom: 2px;">
 	<%= f.label :tags_a, "Tags:", :class => "required",
     :style => "line-height: 2.3em;" %>
-  <%= f.select "tags_a", Tag.order(:tag).map{|t|
-    [ "#{t.tag} - #{t.description}", t.tag ] }, {},
-    { :multiple => true } %>
+  <%= f.select "tags_a", options_for_select(
+    Tag.all_with_filtered_counts_for(@user).map{|t|
+    [ "#{t.tag} - #{t.description}", t.tag, { "data-html" => raw("<strong>") +
+      t.tag + raw("</strong> - ") + t.description.to_s +
+      (t.filtered_count == 0 ? "" :
+      raw(" <em>") + "#{t.filtered_count} user" +
+      (t.filtered_count == 1 ? "" : "s") + " filtering" +
+      raw("</em>")) } ]}, f.object.tags_a), {}, { :multiple => true } %>
   </div>
 
   <div class="boxline">
@@ -35,3 +40,12 @@
       :autocomplete => "off" %>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $("#story_fetch_title").click(function() {
+      Lobsters.fetchURLTitle($(this), $("#story_url"), $("#story_title"));
+      return false;
+    });
+  });
+</script>
