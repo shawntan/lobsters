@@ -9,7 +9,7 @@ class Comment < ActiveRecord::Base
   attr_accessible :comment, :moderation_reason
 
   attr_accessor :parent_comment_short_id, :current_vote, :previewing,
-    :indent_level, :highlighted
+    :indent_level, :highlighted, :is_learning_summary
 
   before_create :assign_short_id_and_upvote, :assign_initial_confidence
   after_create :assign_votes, :mark_submitter, :deliver_reply_notifications,

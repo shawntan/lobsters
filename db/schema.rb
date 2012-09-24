@@ -11,23 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120919195401) do
+ActiveRecord::Schema.define(:version => 20120924101324) do
 
   create_table "comments", :force => true do |t|
-    t.datetime "created_at",                                                                          :null => false
+    t.datetime "created_at",                                                                           :null => false
     t.datetime "updated_at"
-    t.string   "short_id",           :limit => 10,                                 :default => "",    :null => false
-    t.integer  "story_id",                                                                            :null => false
-    t.integer  "user_id",                                                                             :null => false
+    t.string   "short_id",            :limit => 10,                                 :default => "",    :null => false
+    t.integer  "story_id",                                                                             :null => false
+    t.integer  "user_id",                                                                              :null => false
     t.integer  "parent_comment_id"
     t.integer  "thread_id"
-    t.text     "comment",                                                                             :null => false
-    t.integer  "upvotes",                                                          :default => 0,     :null => false
-    t.integer  "downvotes",                                                        :default => 0,     :null => false
-    t.decimal  "confidence",                       :precision => 20, :scale => 19, :default => 0.0,   :null => false
+    t.text     "comment",                                                                              :null => false
+    t.integer  "upvotes",                                                           :default => 0,     :null => false
+    t.integer  "downvotes",                                                         :default => 0,     :null => false
+    t.decimal  "confidence",                        :precision => 20, :scale => 19, :default => 0.0,   :null => false
     t.text     "markeddown_comment"
-    t.boolean  "is_deleted",                                                       :default => false
-    t.boolean  "is_moderated",                                                     :default => false
+    t.boolean  "is_deleted",                                                        :default => false
+    t.boolean  "is_moderated",                                                      :default => false
+    t.boolean  "is_learning_summary",                                               :default => false
   end
 
   add_index "comments", ["confidence"], :name => "confidence_idx"
