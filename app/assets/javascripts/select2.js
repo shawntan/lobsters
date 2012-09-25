@@ -493,7 +493,7 @@
                         if (i === 0 && placeholder !== undefined && text === "") return true;
 
                         if (query.matcher(term, text)) {
-                            data.results.push({id: e.attr("value"), text: text});
+                          data.results.push({id: e.attr("value"), text: text});
                         }
                     });
                     query.callback(data);

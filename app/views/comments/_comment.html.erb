@@ -24,8 +24,12 @@ class="comment <%= comment.current_vote ? (comment.current_vote[:vote] == 1 ?
       <% else %>
         <a href="/u/<%= comment.user.username %>"><%= comment.user.username
           %></a>
-
-        <%= comment.has_been_edited?? "edited" : "" %>
+        <%= comment.has_been_edited?? "edited" : "posted" %>
+           <% if comment.is_learning_summary %>
+        <span class="learning_summary">
+          learning summary
+        </span>
+      <% end %>
         <%= time_ago_in_words(comment.has_been_edited?? comment.updated_at :
           comment.created_at).gsub(/^about /, "") %> ago
 
@@ -34,7 +38,7 @@ class="comment <%= comment.current_vote ? (comment.current_vote[:vote] == 1 ?
             (<%= comment.downvote_summary.downcase %>)
           <% elsif comment.current_vote && comment.current_vote[:vote] == -1 %>
             (<%= Vote::COMMENT_REASONS[comment.current_vote[:reason]].downcase
-              %>)
+            %>)
           <% end %>
         </span>
       <% end %>

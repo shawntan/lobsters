@@ -106,6 +106,36 @@
 </script>
 
 <div class="box wide">
+<<<<<<< HEAD
 	<strong>Users</strong>
 	<div id="usertree"></div>
+=======
+  <strong>Users</strong>
+  <p>
+  <% prev_level = 0 %>
+  <% @tree.each do |u| %>
+    <% if u[:level] > prev_level %>
+      <ul class="<%= u[:level] == 1 ? "root" : "user_tree" %>">
+    <% elsif u[:level] < prev_level %>
+      <% (prev_level - u[:level]).times do %>
+        </ul>
+      <% end %>
+    <% else %>
+      </li>
+    <% end %>
+
+    <li><a href="/u/<%= u[:username] %>"><%= u[:username] %></a>
+      (<%= u[:karma] %>)
+      <% if u[:is_admin] %>
+        (administrator)
+      <% elsif u[:is_moderator] %>
+        (moderator)
+      <% end %>
+
+    <% prev_level = u[:level] %>
+  <% end %>
+  <% prev_level.times do %>
+    </ul>
+  <% end %>
+>>>>>>> 20267e8bfea257fd2b21b5f94ccdaa3974e21970
 </div>

@@ -2,6 +2,7 @@
  *= require select2
  *= require_self
  *= require mobile
+ *= require bootstrap.min
  */
 
 
@@ -324,6 +325,15 @@ div#footer a {
   float: right;
 }
 
+/* other specifics */
+div#user_about {
+	margin-left: 12em;
+}
+
+div#gravatar {
+	float: right;
+}
+
 /* stories */
 
 ol.stories,
@@ -482,6 +492,15 @@ li .byline {
   color: #888;
   font-size: 12px;
 }
+li .learning_summary {
+  color: #fff;
+  padding: 1px 3px 1px 5px;
+  margin-right: 3px;
+  background: #608A00;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
 li.story .byline {
   margin-top: 1px;
 }
@@ -584,6 +603,11 @@ div.comment_reply form {
 div.comment_reply button.comment-post {
   font-weight: bold;
 }
+span.learning_summary_checkbox {
+  background: #fff6cb;
+  padding: 3px;
+  margin: 0px 5px;
+}
 
 a.pagelink {
   border: 1px solid #ddd;
@@ -657,6 +681,10 @@ div#story_preview {
 div#story_box input#story_url {
   width: 508px;
 }
+div#story_box button#story_fetch_title {
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
 div#story_box input#story_title,
 div#story_box input#story_moderation_reason {
   width: 600px;
@@ -707,9 +735,6 @@ ul.user_tree li, ul.root li {
   color: #888;
 }
 
-.profile-img {
-  float: right;
-}
 /* data tables */
 
 table.data caption {
@@ -1127,3 +1152,4 @@ div.modal_confirm_content div.modal_confirm_buttonbar input.default_button {
   -o-box-shadow     : none;
   box-shadow        : none;
 }
+

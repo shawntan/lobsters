@@ -23,7 +23,22 @@ class CommentsController < ApplicationController
           :status => 400 }
       end
     else
+      comment.is_learning_summary = params[:is_learning_summary]
       comment.thread_id = Keystore.incremented_value_for("thread_id")
+    end
+
+    # prevent double-clicks of the post button
+    if !params[:preview].present? &&
+    (pc = Comment.find_by_story_id_and_user_id_and_parent_comment_id(story.id,
+    @user.id, comment.parent_comment_id))
+      if (Time.now - pc.created_at) < 5.minutes
+        comment.errors.add(:comment, "^You have already posted a comment " <<
+          "here recently.")
+
+        return render :partial => "commentbox", :layout => false,
+          :content_type => "text/html", :locals => { :story => story,
+          :comment => comment }
+      end
     end
 
     if comment.valid? && !params[:preview].present? && comment.save
@@ -175,7 +190,7 @@ class CommentsController < ApplicationController
     @cur_url = "/comments"
 
     @comments = Comment.find(:all, :conditions => "is_deleted = 0",
-      :order => "created_at DESC", :limit => 20, :include => [ :user, :story ])
+      :order => "created_at DESC", :limit => 20, :include => [ :user, :story ]) 
 
     if @user
       @votes = Vote.comment_votes_by_user_for_comment_ids_hash(@user.id,

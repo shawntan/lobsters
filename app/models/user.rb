@@ -9,7 +9,13 @@ class User < ActiveRecord::Base
     :class_name => "Message",
     :foreign_key => "recipient_user_id"
   has_many :tag_filters
+<<<<<<< HEAD
   has_many :children, :class_name => "User", :foreign_key => "invited_by_user_id"
+=======
+  belongs_to :invited_by_user,
+    :class_name => "User"
+
+>>>>>>> 20267e8bfea257fd2b21b5f94ccdaa3974e21970
   has_secure_password
 
   validates_format_of :username, :with => /\A[A-Za-z0-9][A-Za-z0-9_-]*\Z/
@@ -22,10 +28,11 @@ class User < ActiveRecord::Base
 
   attr_accessible :username, :email, :password, :password_confirmation,
     :about, :email_replies, :pushover_replies, :pushover_user_key,
-    :pushover_device, :email_messages, :pushover_messages
+    :pushover_device, :email_messages, :pushover_messages, :email_mentions,
+    :pushover_mentions
 
   before_save :check_session_token
-  after_create :create_default_tag_filters
+  after_create :create_default_tag_filters, :create_rss_token
 
   def check_session_token
     if self.session_token.blank?
@@ -39,6 +46,12 @@ class User < ActiveRecord::Base
       tf.tag_id = t.id
       tf.user_id = self.id
       tf.save
+    end
+  end
+
+  def create_rss_token
+    if self.rss_token.blank?
+      self.rss_token = Utils.random_str(60)
     end
   end
 
@@ -60,7 +73,8 @@ class User < ActiveRecord::Base
     if self.karma == 0
       0
     else
-      self.karma.to_f / (self.stories_submitted_count + self.comments_posted_count)
+      self.karma.to_f / (self.stories_submitted_count +
+        self.comments_posted_count)
     end
   end
 

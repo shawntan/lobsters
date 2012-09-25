@@ -6,13 +6,14 @@ class Comment < ActiveRecord::Base
   belongs_to :parent_comment,
     :class_name => "Comment"
   
-  attr_accessible :comment, :moderation_reason
+  attr_accessible :comment, :moderation_reason, :is_learning_summary
 
   attr_accessor :parent_comment_short_id, :current_vote, :previewing,
     :indent_level, :highlighted
 
-  before_create :assign_short_id_and_upvote
-  after_create :assign_votes, :mark_submitter, :deliver_reply_notifications
+  before_create :assign_short_id_and_upvote, :assign_initial_confidence
+  after_create :assign_votes, :mark_submitter, :deliver_reply_notifications,
+    :deliver_mention_notifications
   after_destroy :unassign_votes
 
   MAX_EDIT_MINS = 45
@@ -98,9 +99,34 @@ class Comment < ActiveRecord::Base
     Keystore.increment_value_for("user:#{self.user_id}:comments_posted")
   end
 
+  def deliver_mention_notifications
+    self.plaintext_comment.scan(/\B\@([\w\-]+)/).flatten.uniq.each do |mention|
+      if u = User.find_by_username(mention)
+        begin
+          if u.email_mentions?
+            EmailReply.mention(self, u).deliver
+          end
+
+          if u.pushover_mentions? && u.pushover_user_key.present?
+            Pushover.push(u.pushover_user_key, u.pushover_device, {
+              :title => "Lobsters mention by #{self.user.username} on " <<
+                self.story.title,
+              :message => self.plaintext_comment,
+              :url => self.url,
+              :url_title => "Reply to #{self.user.username}",
+            })
+          end
+        rescue => e
+          Rails.logger.error "failed to deliver mention notification to " <<
+            "#{u.username}: #{e.message}"
+        end
+      end
+    end
+  end
+
   def deliver_reply_notifications
-    begin
-      if self.parent_comment_id && u = self.parent_comment.try(:user)
+    if self.parent_comment_id && u = self.parent_comment.try(:user)
+      begin
         if u.email_replies?
           EmailReply.reply(self, u).deliver
         end
@@ -114,8 +140,10 @@ class Comment < ActiveRecord::Base
             :url_title => "Reply to #{self.user.username}",
           })
         end
+      rescue => e
+        Rails.logger.error "failed to deliver reply notification to " <<
+          "#{u.username}: #{e.message}"
       end
-    rescue
     end
   end
 
@@ -188,6 +216,10 @@ class Comment < ActiveRecord::Base
     under = 1.0 + ((1.0 / n) * z * z)
 
     return (left - right) / under
+  end
+
+  def assign_initial_confidence
+    self.confidence = self.calculated_confidence
   end
 
   def unassign_votes

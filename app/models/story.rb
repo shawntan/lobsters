@@ -19,7 +19,7 @@ class Story < ActiveRecord::Base
   attr_accessible :title, :description, :tags_a, :moderation_reason
 
   before_create :assign_short_id
-  before_save :log_moderation
+  before_save :log_moderation, :check_tags
   after_create :mark_submitter
   after_save :deal_with_tags
   
@@ -163,6 +163,15 @@ class Story < ActiveRecord::Base
     Keystore.increment_value_for("user:#{self.user_id}:stories_submitted")
   end
 
+  def check_tags
+    (self.tags_to_add || []).each do |t|
+      if !t.valid_for?(self.user)
+        raise "#{self.user.username} does not have permission to use " <<
+          "privileged tag #{t.tag}"
+      end
+    end
+  end
+
   def deal_with_tags
     (self.tags_to_delete || []).each do |t|
       if t.is_a?(Tagging)
@@ -173,7 +182,7 @@ class Story < ActiveRecord::Base
     end
 
     (self.tags_to_add || []).each do |t|
-      if t.is_a?(Tag)
+      if t.is_a?(Tag) && t.valid_for?(self.user)
         tg = Tagging.new
         tg.tag_id = t.id
         tg.story_id = self.id
@@ -243,15 +252,14 @@ class Story < ActiveRecord::Base
 
     seconds = self.created_at.to_i - 398995200
 
-    # XXX: while we're slow, allow a window of 36 hours.  as the site grows,
-    # shrink this down to 12 or so.
+    # TODO: as the site grows, shrink this down to 12 or so.
     window = 60 * 60 * 36
 
     return -(order + (sign * (seconds.to_f / window))).round(7)
   end
 
   def generated_markeddown_description
-    Markdowner.to_html(self.description)
+    Markdowner.to_html(self.description, allow_images = true)
   end
 
   def description=(desc)
