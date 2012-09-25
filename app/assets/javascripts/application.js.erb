@@ -231,6 +231,10 @@ $(document).ready(function() {
     return false;
   });
 
+  $('a[rel=popover]').popover({animation: false}).click(function(e) {
+            e.preventDefault()
+        });
+
   $("button.comment-cancel").live("click", function() {
     $(this).parents("div.comment_reply form").remove();
   });
