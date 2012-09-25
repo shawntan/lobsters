@@ -491,6 +491,15 @@ li .byline {
   color: #888;
   font-size: 12px;
 }
+li .learning_summary {
+  color: #fff;
+  padding: 1px 3px 1px 5px;
+  margin-right: 3px;
+  background: #608A00;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
 li.story .byline {
   margin-top: 1px;
 }
@@ -592,6 +601,11 @@ div.comment_reply form {
 
 div.comment_reply button.comment-post {
   font-weight: bold;
+}
+span.learning_summary_checkbox {
+  background: #fff6cb;
+  padding: 3px;
+  margin: 0px 5px;
 }
 
 a.pagelink {

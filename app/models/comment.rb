@@ -6,10 +6,10 @@ class Comment < ActiveRecord::Base
   belongs_to :parent_comment,
     :class_name => "Comment"
   
-  attr_accessible :comment, :moderation_reason
+  attr_accessible :comment, :moderation_reason, :is_learning_summary
 
   attr_accessor :parent_comment_short_id, :current_vote, :previewing,
-    :indent_level, :highlighted, :is_learning_summary
+    :indent_level, :highlighted
 
   before_create :assign_short_id_and_upvote, :assign_initial_confidence
   after_create :assign_votes, :mark_submitter, :deliver_reply_notifications,

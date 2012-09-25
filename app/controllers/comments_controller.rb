@@ -23,6 +23,7 @@ class CommentsController < ApplicationController
           :status => 400 }
       end
     else
+      comment.is_learning_summary = params[:is_learning_summary]
       comment.thread_id = Keystore.incremented_value_for("thread_id")
     end
 
