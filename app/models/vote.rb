@@ -140,12 +140,8 @@ class Vote < ActiveRecord::Base
         if v.comment_id
           c = Comment.find(v.comment_id)
           if c.user_id != user_id
-<<<<<<< HEAD
-              Keystore.increment_value_for("user:#{c.user_id}:karma",upvote-downvote)
-=======
             Keystore.increment_value_for("user:#{c.user_id}:karma",
               upvote - downvote)
->>>>>>> 20267e8bfea257fd2b21b5f94ccdaa3974e21970
           end
 
           c.give_upvote_or_downvote_and_recalculate_confidence!(upvote,
@@ -153,12 +149,8 @@ class Vote < ActiveRecord::Base
         else
           s = Story.find(v.story_id)
           if s.user_id != user_id
-<<<<<<< HEAD
-              Keystore.increment_value_for("user:#{s.user_id}:karma",upvote-downvote)
-=======
             Keystore.increment_value_for("user:#{s.user_id}:karma",
               upvote - downvote)
->>>>>>> 20267e8bfea257fd2b21b5f94ccdaa3974e21970
           end
 
           s.give_upvote_or_downvote_and_recalculate_hotness!(upvote, downvote)
